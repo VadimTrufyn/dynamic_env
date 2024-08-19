@@ -37,3 +37,4 @@ jobs:
           push: true
           tags: 211125572880.dkr.ecr.eu-central-1.amazonaws.com/hello:${{ github.sha }}
           file: ./app/Dockerfile
+          platforms: linux/amd64
