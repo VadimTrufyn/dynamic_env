@@ -8,7 +8,7 @@ WORKDIR /app
 COPY hello.py .
 
 # Відкриваємо порт 8080
-EXPOSE 8080
+EXPOSE 80
 
 # Запускаємо веб-сервер
 CMD ["python", "hello.py"]

@@ -8,7 +8,7 @@ class HelloHandler(BaseHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(b"hello Misha")
 
-def run(server_class=HTTPServer, handler_class=HelloHandler, port=8080):
+def run(server_class=HTTPServer, handler_class=HelloHandler, port=80):
     server_address = ('', port)
     httpd = server_class(server_address, handler_class)
     print(f'Starting httpd server on port {port}...')
