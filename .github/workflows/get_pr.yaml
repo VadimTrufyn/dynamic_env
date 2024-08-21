@@ -1,0 +1,25 @@
+name: Get Pull Request Branches
+
+on:
+  workflow_dispatch:
+
+jobs:
+  get-pr-branches:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Get pull requests
+        id: get_prs
+        run: |
+          PRS=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            "https://api.github.com/repos/${{ github.repository }}/pulls?state=open" \
+            | jq -r '.[].head.ref')
+          echo "PR_BRANCHES=$PRS" >> $GITHUB_ENV
+
+      - name: Output branches
+        run: |
+          echo "Branches with open pull requests:"
+          echo "$PR_BRANCHES"
