@@ -17,9 +17,4 @@ jobs:
           PRS=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
             "https://api.github.com/repos/${{ github.repository }}/pulls?state=open" \
             | jq -r '.[].head.ref')
-          echo "PR_BRANCHES=$PRS" >> $GITHUB_ENV
-
-      - name: Output branches
-        run: |
-          echo "Branches with open pull requests:"
-          echo "$PR_BRANCHES"
+          echo "PR_BRANCHES=$PRS" 
