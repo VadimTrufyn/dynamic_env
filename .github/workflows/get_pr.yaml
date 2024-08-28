@@ -7,8 +7,9 @@ env:
   AWS_ECR: "211125572880.dkr.ecr.eu-central-1.amazonaws.com"
   IMAGE_TAG: ${{ github.ref_name }}
   DOCKERFILE: ./app/Dockerfile
+  GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
 jobs:  
-  job-name:
+  build-push-img:
     if: ${{ (github.event.ref_type == 'branch') }}
     runs-on: ubuntu-latest
 
@@ -36,5 +37,47 @@ jobs:
           docker build -t $AWS_ECR/$REPOSITORY_NAME:$IMAGE_TAG -f $DOCKERFILE ./app 
           docker push $AWS_ECR/$REPOSITORY_NAME:$IMAGE_TAG
 
+  create-new-fargate:
+    if: ${{ (github.event.ref_type == 'branch') }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout infra-branch-env
+        uses: actions/checkout@v4
+        with:
+          ref: env-infra
+
+      - name: Configure Git
+        run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "actions@github.com"
+
+      - name: Change list preview
+        run: |
+          cd ./.infrastructure/fargate
+          sh ../../.github/scripts/edit_pr_list.sh add ${{ github.ref_name }}
+          git add variable.tf
+          git commit -m '${{ github.ref_name }}'
       
- 
+      - name: Push changes
+        run: |
+          git push
+        env:
+          GITHUB_TOKEN: $GITHUB_TOKEN
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: eu-central-1
+          
+      - name: Terraform congigure
+        run: |
+
+          terraform init -backend-config=backend.tfvars
+          terraform plan
+
+
+
+
