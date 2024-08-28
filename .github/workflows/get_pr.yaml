@@ -1,11 +1,15 @@
 name: Create dynamic env 
 
 on: create
-
-jobs:
-  if: ${{ (github.event.ref_type == 'branch') }}
+env: 
+  AWS_REGION: eu-central-1
+  REPOSITORY_NAME: hello
+  AWS_STAGE_ECR: 211125572880.dkr.ecr.eu-central-1.amazonaws.com
+  IMAGE_TAG: ${{ github.ref_name }}
+  DOCKERFILE: ./app/Dockerfile
+jobs:  
   job-name:
-    
+    if: ${{ (github.event.ref_type == 'branch') }}
     runs-on: ubuntu-latest
 
     steps:
@@ -13,3 +17,23 @@ jobs:
         run: |
           echo ${{ github.ref_name }}
 
+      - name: Checkout codebase
+        uses: actions/checkout@v4
+  
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: $AWS_REGION
+
+      - name: Login to ECR 
+        run: |
+          aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin
+
+      - name: Build image and push
+        run: |
+          docker build -t $AWS_ECR/$REPOSITORY_NAME:$IMAGE_TAG  -f $DOCKERFILE ./app --push
+
+      
+ 
