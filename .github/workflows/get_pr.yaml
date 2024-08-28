@@ -46,6 +46,9 @@ jobs:
         uses: actions/checkout@v4
         with:
           ref: env-infra
+      
+
+
 
       - name: Configure Git
         run: |
@@ -54,6 +57,7 @@ jobs:
 
       - name: Change list preview
         run: |
+          git checkout env-infra
           cd ./.infrastructure/fargate
           sh ../../.github/scripts/edit_pr_list.sh add ${{ github.ref_name }}
           git add variable.tf
@@ -71,7 +75,7 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: eu-central-1
-          
+
       - name: Terraform congigure
         run: |
 
