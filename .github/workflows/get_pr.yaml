@@ -11,33 +11,33 @@ env:
   DOCKERFILE: ./app/Dockerfile
   GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
 jobs:  
-  build-push-img:
-    if: ${{ (github.event.ref_type == 'branch') }}
-    runs-on: ubuntu-latest
+#  build-push-img:
+#    if: ${{ (github.event.ref_type == 'branch') }}
+#    runs-on: ubuntu-latest
 
-    steps:
-      - name: Get branchy name
-        run: |
-          echo ${{ github.ref_name }}
+#    steps:
+#      - name: Get branchy name
+#        run: |
+#          echo ${{ github.ref_name }}
 
-      - name: Checkout codebase
-        uses: actions/checkout@v4
+#      - name: Checkout codebase
+#        uses: actions/checkout@v4
   
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: eu-central-1
+#      - name: Configure AWS credentials
+#        uses: aws-actions/configure-aws-credentials@v1
+#        with:
+#          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+#          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+#          aws-region: eu-central-1
 
-      - name: Login to Amazon ECR
-        id: login-ecr
-        uses: aws-actions/amazon-ecr-login@v2
+#      - name: Login to Amazon ECR
+#        id: login-ecr
+#        uses: aws-actions/amazon-ecr-login@v2
   
-      - name: Build, tag, and push docker image to Amazon ECR
-        run: |
-          docker build -t $AWS_ECR/$REPOSITORY_NAME:$IMAGE_TAG -f $DOCKERFILE ./app 
-          docker push $AWS_ECR/$REPOSITORY_NAME:$IMAGE_TAG
+#      - name: Build, tag, and push docker image to Amazon ECR
+#        run: |
+#          docker build -t $AWS_ECR/$REPOSITORY_NAME:$IMAGE_TAG -f $DOCKERFILE ./app 
+#          docker push $AWS_ECR/$REPOSITORY_NAME:$IMAGE_TAG
 
   create-new-fargate:
     if: ${{ (github.event.ref_type == 'branch') }}
@@ -66,13 +66,11 @@ jobs:
           sh ../../.github/scripts/edit_pr_list.sh add ${{ github.ref_name }}
           git add variable.tf
           git commit -m '${{ github.ref_name }}'
-      
-      - name: Push changes
-        run: |
           git push
         env:
           GITHUB_TOKEN: $GITHUB_TOKEN
 
+          
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
@@ -82,9 +80,10 @@ jobs:
 
       - name: Terraform congigure
         run: |
+          pwd 
+          ls -l
 
-          terraform init -backend-config=backend.tfvars
-          terraform plan
+          
 
 
 
