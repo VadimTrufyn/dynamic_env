@@ -42,7 +42,7 @@ jobs:
   create-new-fargate:
     if: ${{ (github.event.ref_type == 'branch') }}
     runs-on: ubuntu-latest
-
+    needs: [build-push-img]
     steps:
       - name: Checkout infra-branch-env
         uses: actions/checkout@v4
