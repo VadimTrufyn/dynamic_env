@@ -82,7 +82,11 @@ jobs:
         run: |
           pwd 
           ls -l
-
+          cd ./.infrastructure/fargate
+          pwd 
+          ls -l
+          terraform init -backend-config=backend.tfvars
+          terraform plan
           
 
 
