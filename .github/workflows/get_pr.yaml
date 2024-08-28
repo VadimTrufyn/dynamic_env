@@ -11,14 +11,14 @@ env:
   DOCKERFILE: ./app/Dockerfile
   GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
 jobs:  
-#  build-push-img:
-#    if: ${{ (github.event.ref_type == 'branch') }}
-#    runs-on: ubuntu-latest
+  build-push-img:
+    if: ${{ (github.event.ref_type == 'branch') }}
+    runs-on: ubuntu-latest
 
-#    steps:
-#      - name: Get branchy name
-#        run: |
-#          echo ${{ github.ref_name }}
+    steps:
+      - name: Get branchy name
+        run: |
+          echo ${{ github.ref_name }}
 
 #      - name: Checkout codebase
 #        uses: actions/checkout@v4
