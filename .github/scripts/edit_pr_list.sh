@@ -5,7 +5,7 @@ ACTION=$1
 ITEM=$2
 
 # Шлях до Terraform файлу
-TF_FILE="varfiable.tf"
+TF_FILE="variable.tf"
 
 add_new_item() {
   # Перевірка чи вже є новий елемент у списку
@@ -30,7 +30,7 @@ add_new_item() {
 
 
 # Виконання дії на основі аргументу
-if [ "$ACTION" == "add" ]; then
+if [ "$ACTION" = "add" ]; then
   add_new_item
 else
   echo "Неправильна команда. Використовуйте 'add' або 'remove'."
