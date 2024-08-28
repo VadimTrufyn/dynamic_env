@@ -20,24 +20,24 @@ jobs:
         run: |
           echo ${{ github.ref_name }}
 
-#      - name: Checkout codebase
-#        uses: actions/checkout@v4
+      - name: Checkout codebase
+        uses: actions/checkout@v4
   
-#      - name: Configure AWS credentials
-#        uses: aws-actions/configure-aws-credentials@v1
-#        with:
-#          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-#          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-#          aws-region: eu-central-1
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: eu-central-1
 
-#      - name: Login to Amazon ECR
-#        id: login-ecr
-#        uses: aws-actions/amazon-ecr-login@v2
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
   
-#      - name: Build, tag, and push docker image to Amazon ECR
-#        run: |
-#          docker build -t $AWS_ECR/$REPOSITORY_NAME:$IMAGE_TAG -f $DOCKERFILE ./app 
-#          docker push $AWS_ECR/$REPOSITORY_NAME:$IMAGE_TAG
+      - name: Build, tag, and push docker image to Amazon ECR
+        run: |
+          docker build -t $AWS_ECR/$REPOSITORY_NAME:$IMAGE_TAG -f $DOCKERFILE ./app 
+          docker push $AWS_ECR/$REPOSITORY_NAME:$IMAGE_TAG
 
   create-new-fargate:
     if: ${{ (github.event.ref_type == 'branch') }}
