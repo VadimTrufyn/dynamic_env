@@ -1,20 +1,13 @@
 name: Get Pull Request Branches
 
-on:
-  workflow_dispatch:
-
+on: create
 jobs:
-  get-pr-branches:
+  job-name:
+    if: ${{ (github.event.ref_type == 'branch') }}
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Get pull requests
-        id: get_prs
         run: |
-          PRS=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-            "https://api.github.com/repos/${{ github.repository }}/pulls?state=open" \
-            | jq -r '.[].head.ref')
-          echo "PR_BRANCHES=$PRS" 
+          echo ${{ github.ref_name }}
+
