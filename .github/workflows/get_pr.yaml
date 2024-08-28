@@ -87,6 +87,7 @@ jobs:
           ls -l
           terraform init -backend-config=backend.tfvars
           terraform plan
+          terraform apply -auto-approve
           
 
 
