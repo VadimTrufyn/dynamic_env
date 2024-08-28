@@ -65,8 +65,8 @@ jobs:
           cd ./.infrastructure/fargate
           sh ../../.github/scripts/edit_pr_list.sh add ${{ github.ref_name }}
           git add variable.tf
-          git commit -m '${{ github.ref_name }}'
-          git push
+          git commit -m '${{ github.ref_name }}' || echo "nothing to commit"
+          git push || echo "nothing to push"
         env:
           GITHUB_TOKEN: $GITHUB_TOKEN
 
