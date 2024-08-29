@@ -24,7 +24,7 @@ env:
 jobs:  
   build-push-img:
     if: |
-      github.event_name == 'create' ||
+      (github.event_name == 'create' || github.event_name == 'delete')||
       (github.event_name == 'push' && startsWith(github.event.head_commit.message, 'push'))
     runs-on: ubuntu-latest
     steps:
