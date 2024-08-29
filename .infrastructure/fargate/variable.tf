@@ -17,6 +17,6 @@ variable "ecs_container_name" {
 
 variable "pr_list" {
   type = list(string)
-  default = [ ]
+  default = [ "test1"]
 }
 
