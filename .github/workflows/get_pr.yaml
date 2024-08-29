@@ -72,11 +72,22 @@ jobs:
           git remote set-url origin https://x-access-token:${{ secrets.MY_GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
 
      
-      - name: Change list preview
+      - name: Add  ${{ github.ref_name }} to list preview 
         if: ${{ github.event_name == 'create' && github.event.ref_type == 'branch' }}
         run: |
           cd ./.infrastructure/fargate
           sh ../../.github/scripts/edit_pr_list.sh add ${{ github.ref_name }}
+          git add variable.tf
+          git commit -m '${{ github.ref_name }}' || echo "nothing to commit"
+          git push || echo "nothing to push"
+        env:
+          GITHUB_TOKEN: $GITHUB_TOKEN
+
+      - name: Rm  ${{ github.ref_name }} to list preview 
+        if: ${{ github.event_name == 'delete' && github.event.ref_type == 'branch' }}
+        run: |
+          cd ./.infrastructure/fargate
+          sh ../../.github/scripts/edit_pr_list.sh rm ${{ github.ref_name }}
           git add variable.tf
           git commit -m '${{ github.ref_name }}' || echo "nothing to commit"
           git push || echo "nothing to push"
