@@ -23,7 +23,7 @@ add_new_item() {
     { print }
     ' "$TF_FILE" > tmpfile && mv tmpfile "$TF_FILE"
 
-    sed -i '' 's/\[ ,/[/' "$TF_FILE"
+    sed -i 's/\[ ,/[/' "$TF_FILE"
   else
     echo "$ITEM вже існує в списку."
   fi
@@ -34,7 +34,7 @@ add_new_item() {
 remove_item() {
   # Перевірка чи є елемент у списку
   if grep -q "$ITEM" "$TF_FILE"; then
-    sed -i '' 's/\[/[ ,/' "$TF_FILE"
+    sed -i 's/\[/[ ,/' "$TF_FILE"
     # Видалення елемента зі списку
     awk -v item_to_remove="$ITEM" '
     /default = \[.*\]/ {
@@ -49,7 +49,7 @@ remove_item() {
     }
     { print }
     ' "$TF_FILE" > tmpfile && mv tmpfile "$TF_FILE"
-    sed -i '' 's/\[ ,/[/' "$TF_FILE"
+    sed -i 's/\[ ,/[/' "$TF_FILE"
   else
     echo "$ITEM не знайдено в списку."
   fi
