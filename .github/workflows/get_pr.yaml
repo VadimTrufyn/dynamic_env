@@ -5,6 +5,13 @@ on:
   push:
     branches-ignore:
       - 'develop'
+
+    delete:
+      branches:
+        - '*'
+        - '!main'
+        - '!develop'
+        - '!uat'
 permissions:
   contents: write
 env: 
@@ -45,7 +52,7 @@ jobs:
           docker push $AWS_ECR/$REPOSITORY_NAME:$IMAGE_TAG
 
   create-new-fargate:
-    if: ${{ github.event_name == 'create' && github.event.ref_type == 'branch' }}
+    if: ${{ github.event_name == 'create' && github.event.ref_type == 'branch' || github.event_name == 'delete' }}
     runs-on: ubuntu-latest
     needs: [build-push-img]
     steps:
@@ -64,8 +71,9 @@ jobs:
         run: |
           git remote set-url origin https://x-access-token:${{ secrets.MY_GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
 
-
+     
       - name: Change list preview
+        if: ${{ github.event_name == 'create' && github.event.ref_type == 'branch' }}
         run: |
           cd ./.infrastructure/fargate
           sh ../../.github/scripts/edit_pr_list.sh add ${{ github.ref_name }}
