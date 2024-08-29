@@ -1,5 +1,5 @@
 #!/bin/bash
-set -x
+#set -x
 # Нова строка для додавання або видалення
 ACTION=$1
 ITEM=$2
@@ -22,6 +22,8 @@ add_new_item() {
     }
     { print }
     ' "$TF_FILE" > tmpfile && mv tmpfile "$TF_FILE"
+
+    sed -i '' 's/\[,/[/' "$TF_FILE"
   else
     echo "$ITEM вже існує в списку."
   fi
@@ -29,9 +31,36 @@ add_new_item() {
 
 
 
+remove_item() {
+  # Перевірка чи є елемент у списку
+  if grep -q "$ITEM" "$TF_FILE"; then
+    sed -i '' 's/\[/\[,/' "$TF_FILE"
+    # Видалення елемента зі списку
+    awk -v item_to_remove="$ITEM" '
+    /default = \[.*\]/ {
+      # Зберігаємо оригінальний рядок
+      original_line = $0;
+      # Видаляємо елемент зі списку
+      gsub(", \"" item_to_remove "\"", "", original_line);
+      gsub("\"" item_to_remove "\", ", "", original_line);
+      gsub("\\[ \"" item_to_remove "\" \\]", "[]", original_line); 
+      print original_line;
+      next;
+    }
+    { print }
+    ' "$TF_FILE" > tmpfile && mv tmpfile "$TF_FILE"
+    sed -i '' 's/\[,/[/' "$TF_FILE"
+  else
+    echo "$ITEM не знайдено в списку."
+  fi
+}
+
+
 # Виконання дії на основі аргументу
 if [ "$ACTION" = "add" ]; then
   add_new_item
+elif [ "$ACTION" = "rm" ]; then
+  remove_item
 else
-  echo "Неправильна команда. Використовуйте 'add' або 'remove'."
+  echo "Неправильна команда. Використовуйте 'add' або 'rm'."
 fi
