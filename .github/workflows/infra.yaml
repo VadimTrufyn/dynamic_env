@@ -1,7 +1,7 @@
 name: Creating branch
 
 on: 
-      create:
+    create:
 
 jobs:
 

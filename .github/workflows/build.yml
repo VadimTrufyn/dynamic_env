@@ -16,7 +16,6 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v3
 
-      - name: Build img
-        run: echo "build"
 
-  
+      - name: Get branch name
+        run: echo ${{ github.ref_name }}
