@@ -1,0 +1,17 @@
+name: Creating branch
+
+on: 
+      create:
+
+jobs:
+
+  call-build:
+    uses: ./.github/workflows/build.yml
+
+  build-containers:
+    runs-on: promova-backend
+    needs: [call-build]
+    steps:
+        - name: test
+          run: |
+            echo "test creating ${{ github.ref_name }}"

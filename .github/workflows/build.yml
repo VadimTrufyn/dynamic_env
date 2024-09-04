@@ -1,0 +1,22 @@
+name: build container
+
+on: 
+  workflow_call:
+  push:
+    branches-ignore:
+      - 'develop'
+
+concurrency:
+      group: ${{ github.head_ref || github.ref }}
+
+jobs:
+  build: 
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v3
+
+      - name: Build img
+        run: echo "build"
+
+  

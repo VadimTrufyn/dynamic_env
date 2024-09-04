@@ -1,17 +1,17 @@
 name: Create dynamic env 
 
 on: 
-  create:
-  push:
-    branches-ignore:
-      - 'develop'
+#  create:
+#  push:
+#    branches-ignore:
+#      - 'develop'
 
-  delete:
-    branches:
-      - '*'
-      - '!main'
-      - '!develop'
-      - '!uat'
+#  delete:
+#    branches:
+#      - '*'
+#      - '!main'
+#      - '!develop'
+#      - '!uat'
 permissions:
   contents: write
 concurrency:
@@ -129,5 +129,9 @@ jobs:
           terraform apply -auto-approve
           
 
-
+aws ecs describe-tasks \
+  --cluster cluster-1 \
+  --tasks your-task-arn \
+  --query "tasks[*].attachments[0].details[?name=='privateIPv4Address'].value" \
+  --output text
 
