@@ -14,7 +14,7 @@ jobs:
         id: branch_create
         run: |
           branch=$(echo ${GITHUB_REF#refs/heads/})
-          branch_name=$(echo $branch_name | tr '[:upper:]' '[:lower:]')
+          branch_name=$(echo $branch | tr '[:upper:]' '[:lower:]')
           echo "branch_name=$branch_name" >> $GITHUB_OUTPUT
 
       - name: print
