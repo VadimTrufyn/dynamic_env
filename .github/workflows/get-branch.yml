@@ -1,0 +1,23 @@
+name: Create dynamic branch env 
+
+on: 
+  create:
+  workflow_dispatch:
+  
+
+jobs:   
+  print:
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Get branch name for creating
+        id: branch_create
+        run: |
+          branch=$(echo ${GITHUB_REF#refs/heads/})
+          branch_name=$(echo $branch_name | tr '[:upper:]' '[:lower:]')
+          echo "branch_name=$branch_name" >> $GITHUB_OUTPUT
+
+      - name: print
+        run: |
+          echo ${{ steps.branch_create.outputs.branch_name }}
+      
