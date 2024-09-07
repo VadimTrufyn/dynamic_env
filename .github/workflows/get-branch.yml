@@ -1,4 +1,4 @@
-name: Create dynamic branch env 
+name: Print
 
 on: 
   create:
