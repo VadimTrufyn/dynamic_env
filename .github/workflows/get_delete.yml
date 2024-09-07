@@ -1,0 +1,25 @@
+name: Destroy dynamic branch env 
+
+on: 
+  workflow_dispatch:
+  delete:
+    branches:
+
+jobs:   
+  destroy-br:
+    runs-on: ubuntu-latest
+    steps:
+
+
+      - name: Get branch name for destroying
+        id: branch_destroy
+        run: |
+          branch=${{ github.event.ref }}
+          branch_name=$(echo $branch | tr '[:upper:]' '[:lower:]')
+          echo "branch_name=$branch_name" >> $GITHUB_OUTPUT
+
+
+
+      - name: Print branch name for destroying
+        run: |
+          echo ${{ steps.branch_destroy.outputs.branch_name }}
